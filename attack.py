@@ -3,8 +3,7 @@ import tkinter as tk
 from tkinter import scrolledtext, messagebox
 import threading
 
-# Hardcoded correct password
-CORRECT_PASSWORD = "apple"
+CORRECT_PASSWORD = "Abdo#"
 
 def dictionary_attack(dictionary_file, output_box):
     """Attempts login using a predefined dictionary file."""
@@ -29,7 +28,7 @@ def brute_force_attack(output_box):
     for guess in itertools.product(chars, repeat=5):
         guess_password = "".join(guess)
         output_box.insert(tk.END, f"Trying: {guess_password}\n")
-        output_box.yview(tk.END)  # Auto-scroll
+        output_box.yview(tk.END)  
         if guess_password == CORRECT_PASSWORD:
             output_box.insert(tk.END, f"[+] Correct password found using brute force: {guess_password}\n")
             return True
@@ -42,7 +41,7 @@ def start_attack():
         messagebox.showerror("Error", "Please enter a username!")
         return
 
-    output_box.delete(1.0, tk.END)  # Clear previous output
+    output_box.delete(1.0, tk.END)  
     output_box.insert(tk.END, f"[+] Starting attack for user: {username}\n")
     
     dictionary_file = "dictionary.txt"
@@ -52,27 +51,20 @@ def start_attack():
             output_box.insert(tk.END, "[+] Attempting brute force attack...\n")
             brute_force_attack(output_box)
 
-    # Run attack in a separate thread to avoid GUI freezing
     threading.Thread(target=attack_process, daemon=True).start()
 
-# GUI Setup
 root = tk.Tk()
 root.title("Password Cracker")
 root.geometry("500x400")
 root.resizable(False, False)
 
-# Username Input
 tk.Label(root, text="Enter Username:").pack(pady=5)
 username_entry = tk.Entry(root, width=40)
 username_entry.pack(pady=5)
 
-# Start Button
 start_button = tk.Button(root, text="Start Attack", command=start_attack, bg="red", fg="white")
 start_button.pack(pady=10)
 
-# Output Box
 output_box = scrolledtext.ScrolledText(root, width=60, height=15)
 output_box.pack(pady=5)
-
-# Run the GUI
 root.mainloop()
